@@ -1,2 +1,3 @@
 # Python 20-09-2023 
-- criando formatação com python.
+- Criando formatação com python.
+- Criação de table Com Valor regressivo 
