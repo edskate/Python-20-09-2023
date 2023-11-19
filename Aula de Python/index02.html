@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debt Payment Progress</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 1em;
+        }
+
+        section {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Debt Payment Progress</h1>
+    </header>
+
+    <section>
+        <table id="debtPaymentTable">
+            <thead>
+                <tr>
+                    <th>Month</th>
+                    <th>Date</th>
+                    <th>Day</th>
+                    <th>Amount Paid</th>
+                    <th>Remaining Debt</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Table rows will be dynamically added here -->
+            </tbody>
+        </table>
+    </section>
+
+    <script>
+        var totalDebt = 1000;
+        var remainingDebt = totalDebt;
+        var payments = [
+            { amount: 100, date: '2023-11-01' },
+            { amount: 150, date: '2023-11-15' },
+            { amount: 200, date: '2023-12-01' },
+            // Add more payment objects as needed
+        ];
+
+        function generateDebtPaymentTable() {
+            var tableBody = document.querySelector('#debtPaymentTable tbody');
+            var currentDate = new Date();
+
+            for (var i = 0; i < payments.length; i++) {
+                var currentPayment = payments[i];
+                currentDate = new Date(currentPayment.date);
+
+                remainingDebt -= currentPayment.amount;
+
+                var row = document.createElement('tr');
+                row.innerHTML = `<td>${getMonthName(currentDate.getMonth())}</td>
+                                <td>${formatDate(currentDate)}</td>
+                                <td>${currentDate.getDate()}</td>
+                                <td>R$ ${currentPayment.amount.toFixed(2)}</td>
+                                <td>R$ ${remainingDebt.toFixed(2)}</td>`;
+                tableBody.appendChild(row);
+            }
+        }
+
+        function getMonthName(monthIndex) {
+            var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            return months[monthIndex % 12]; // Ensure it wraps around to January after December
+        }
+
+        function formatDate(date) {
+            var options = { year: 'numeric', month: 'numeric', day: 'numeric' };
+            return date.toLocaleDateString('en-US', options);
+        }
+
+        generateDebtPaymentTable();
+    </script>
+
+</body>
+</html>

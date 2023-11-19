@@ -1,0 +1,120 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debt Payment Progress</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 1em;
+        }
+
+        section {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Debt Payment Progress</h1>
+    </header>
+
+    <section>
+        <h2>Debt Summary</h2>
+        <p>Total Debt: R$ 1000,00</p>
+        <button onclick="makePayments([100, 200, 300], ['2023-11-01', '2023-12-01', '2024-01-01'])">Make Payments</button>
+        <table id="paymentTable">
+            <thead>
+                <tr>
+                    <th>Month</th>
+                    <th>Payment Made</th>
+                    <th>Remaining Debt</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Table rows will be dynamically added here -->
+            </tbody>
+        </table>
+    </section>
+
+    <script>
+        var totalDebt = 1000;
+        var paymentsMade = [];
+
+        function makePayments(paymentAmounts, paymentDates) {
+            for (var i = 0; i < paymentAmounts.length; i++) {
+                paymentsMade.push({
+                    amount: paymentAmounts[i],
+                    date: new Date(paymentDates[i])
+                });
+            }
+            updateTable();
+        }
+
+        function calculateRemainingDebt() {
+            return totalDebt - paymentsMade.reduce((total, payment) => total + payment.amount, 0);
+        }
+
+        function updateTable() {
+            var tableBody = document.querySelector('#paymentTable tbody');
+            var remainingDebt = calculateRemainingDebt();
+
+            tableBody.innerHTML = '';
+
+            for (var i = 0; i < paymentsMade.length; i++) {
+                var row = document.createElement('tr');
+                row.innerHTML = `<td>${formatMonthYear(paymentsMade[i].date)}</td>
+                                <td>R$ ${formatCurrency(paymentsMade[i].amount)}</td>
+                                <td>R$ ${formatCurrency(remainingDebt)}</td>`;
+                tableBody.appendChild(row);
+            }
+        }
+
+        function formatMonthYear(date) {
+            var options = { month: 'long', year: 'numeric' };
+            return date.toLocaleDateString('pt-BR', options);
+        }
+
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
+        }
+    </script>
+
+</body>
+</html>
